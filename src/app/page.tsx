@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import { NavButton } from '@/app/ui/nav-button';
 
 export default function Home() {
   return (
@@ -10,9 +10,9 @@ export default function Home() {
         <div>
           <h1 className="text-4xl font-bold">Get started</h1>
           <div>
-            <Link href="/signup">Create an account</Link>
+            <NavButton href="/signup" label={'Create an Account'} />
             <div>or</div>
-            <Link href="/login">Sign in</Link>
+            <NavButton href="/login" label={'Sign in'} />
           </div>
         </div>
       </div>
