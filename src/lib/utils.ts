@@ -7,13 +7,17 @@ export function checkConfirmFields(formData: FormData) {
     return {
       errors: {
         user: {
-          ...(!emailsMatch && { email: ['Email addresses do not match.'] }),
           ...(!emailsMatch && {
-            confirm_email: ['Email addresses do not match.'],
+            email: { _errors: 'Email addresses do not match.' },
           }),
-          ...(!passwordsMatch && { password: ['Passwords do not match.'] }),
+          ...(!emailsMatch && {
+            confirm_email: { _errors: 'Email addresses do not match.' },
+          }),
           ...(!passwordsMatch && {
-            confirm_password: ['Passwords do not match.'],
+            password: { _errors: 'Passwords do not match.' },
+          }),
+          ...(!passwordsMatch && {
+            confirm_password: { _errors: 'Passwords do not match.' },
           }),
         },
       },

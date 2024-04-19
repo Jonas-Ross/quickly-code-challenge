@@ -29,21 +29,41 @@ export default function SignupForm() {
           type={'text'}
         />
         <StyledInput label={'Email'} type={'email'} fieldName={'email'} />
+        {state?.errors?.user && (
+          <div className="text-red-600">
+            {state.errors.user?.email?._errors}
+          </div>
+        )}
         <StyledInput
           label={'Confirm Email'}
           type={'email'}
           fieldName={'confirm_email'}
         />
+        {state?.errors?.user && (
+          <div className="text-red-600">
+            {state.errors.user?.confirm_email?._errors}
+          </div>
+        )}
         <StyledInput
           label={'Password'}
           type={'password'}
           fieldName={'password'}
         />
+        {state?.errors?.user && (
+          <div className="text-red-600">
+            {state.errors.user?.password?._errors}
+          </div>
+        )}
         <StyledInput
           label={'Confirm Password'}
           type={'password'}
           fieldName={'confirm_password'}
         />
+        {state?.errors?.user && (
+          <div className="text-red-600">
+            {state.errors.user?.confirm_password?._errors}
+          </div>
+        )}
       </div>
       <div className="mr-8">
         {/* Company Information Fields */}
@@ -110,6 +130,7 @@ export default function SignupForm() {
         <button className="mt-10" type="submit">
           Submit
         </button>
+        {state?.message && <p className="text-red-600">{state.message}</p>}
       </div>
     </form>
   );

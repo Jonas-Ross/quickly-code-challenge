@@ -11,8 +11,12 @@ const SignupSchema = z.object({
     last_name: z.string(),
     email: z.string().email({ message: 'Invalid email address.' }),
     confirm_email: z.string().email({ message: 'Invalid email address.' }),
-    password: z.string().min(6),
-    confirm_password: z.string().min(6),
+    password: z
+      .string()
+      .min(6, { message: 'Password must be at least 6 characters.' }),
+    confirm_password: z
+      .string()
+      .min(6, { message: 'Password must be at least 6 characters.' }),
   }),
   company: z.object({
     activity: z.object({
@@ -37,7 +41,12 @@ const SignupSchema = z.object({
   }),
 });
 
-export async function createUser(prevState: any, formData: FormData) {
+export type State = {
+  errors: { user?: string[]; company?: string[] };
+  message: string;
+};
+
+export async function createUser(prevState: State, formData: FormData) {
   // For some reason checkboxes are not being serialized as 'on' when checked, so we need to check for that. Don't know why. Might research later.
   const validatedFields = SignupSchema.safeParse({
     user: {
@@ -75,7 +84,7 @@ export async function createUser(prevState: any, formData: FormData) {
   // If form validation fails, return errors early. Otherwise, continue.
   if (!validatedFields.success) {
     return {
-      errors: validatedFields.error.flatten().fieldErrors,
+      errors: validatedFields.error.format(),
       message: 'Missing Fields. Failed to Create Account.',
     };
   }
@@ -104,6 +113,7 @@ export async function createUser(prevState: any, formData: FormData) {
 
     if (response.ok) {
       const res = await response.json();
+      // Analytics etc... Don't really need to do anything here since the endpoint will redirect to login.
       console.log('Account Created:', res);
     } else {
       const { message } = await response.json();
