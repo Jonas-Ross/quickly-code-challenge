@@ -1,7 +1,7 @@
 'use client';
 
 import { useFormState } from 'react-dom';
-import { createUser } from '@/lib/actions';
+import { createUser } from '@/lib/create-actions';
 import { StyledInput } from '@/app/ui/styled-input';
 
 export default function SignupForm() {
@@ -11,7 +11,7 @@ export default function SignupForm() {
   // @ts-ignore
   const [state, dispatch] = useFormState(createUser, initialState);
 
-  console.log(state);
+  // TODO: Show error messages
   return (
     <form action={dispatch} className="flex pt-8">
       <div className="mr-8">
