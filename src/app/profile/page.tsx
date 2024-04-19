@@ -12,15 +12,15 @@ async function fetchAccountInformation() {
 }
 
 export default async function Profile() {
-  const { user } = await fetchAccountInformation();
+  const details = await fetchAccountInformation();
 
-  console.log(user);
+  console.log('what it look like here', details);
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between pt-10">
       <div>
         <h1 className="text-4xl font-bold">Profile</h1>
-        <AccountDetails />
+        <AccountDetails user={details.user} />
       </div>
     </main>
   );
