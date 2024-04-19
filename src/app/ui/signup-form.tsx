@@ -11,8 +11,6 @@ export default function SignupForm() {
   // @ts-ignore
   const [state, dispatch] = useFormState(createUser, initialState);
 
-  // TODO: Show error messages
-  console.log(state);
   return (
     <form action={dispatch} className="flex pt-8">
       <div className="mr-8">
