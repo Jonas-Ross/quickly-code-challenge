@@ -115,6 +115,6 @@ export async function createUser(prevState: any, formData: FormData) {
     };
   }
 
-  revalidatePath('/profile');
-  redirect('/profile');
+  revalidatePath('/login');
+  redirect('/login');
 }

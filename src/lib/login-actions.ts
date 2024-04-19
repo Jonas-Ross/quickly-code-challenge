@@ -3,6 +3,7 @@
 import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
+import { storeToken } from '@/lib/session';
 
 const LoginSchema = z.object({
   email: z.string().email({ message: 'Invalid email address.' }),
@@ -32,10 +33,8 @@ export async function login(prevState: any, formData: FormData) {
     });
 
     if (response.ok) {
-      const { user, jwtToken } = await response.json();
-      console.log('User:', user, 'JWT Token:', jwtToken);
-      revalidatePath('/dashboard');
-      return redirect('/dashboard');
+      const { token } = await response.json();
+      await storeToken(token);
     } else {
       const { message } = await response.json();
       return { message };
@@ -44,4 +43,6 @@ export async function login(prevState: any, formData: FormData) {
     console.error('Failed to login:', error);
     return { message: 'Failed to login.' };
   }
+  revalidatePath('/profile');
+  redirect('/profile');
 }
