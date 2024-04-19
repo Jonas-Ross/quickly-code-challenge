@@ -125,7 +125,7 @@ export default function SignupForm() {
           type={'text'}
           fieldName={'company_expected_activity'}
         />
-        <button className="mt-10" type="submit">
+        <button className="mt-10 rounded bg-blue-500 px-4 py-2" type="submit">
           Submit
         </button>
         {state?.message && <p className="text-red-600">{state.message}</p>}
