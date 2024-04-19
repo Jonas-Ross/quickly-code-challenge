@@ -14,8 +14,6 @@ async function fetchAccountInformation() {
 export default async function Profile() {
   const details = await fetchAccountInformation();
 
-  console.log('what it look like here', details);
-
   return (
     <main className="flex min-h-screen flex-col items-center justify-between pt-10">
       <div>

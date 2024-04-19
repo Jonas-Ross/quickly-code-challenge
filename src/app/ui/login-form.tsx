@@ -10,7 +10,6 @@ export function LoginForm() {
   // Or I might just be misremembering.
   // @ts-ignore
   const [state, dispatch] = useFormState(login, initialState);
-  console.log(state);
   return (
     <form action={dispatch} className="flex flex-col gap-4">
       <StyledInput label={'Email Address'} fieldName={'email'} type={'email'} />
@@ -19,6 +18,9 @@ export function LoginForm() {
         fieldName={'password'}
         type={'password'}
       />
+      <div className="text-red-600">
+        {state?.message && <p className="text-red-600">{state.message}</p>}
+      </div>
       <button type="submit" className="rounded bg-blue-500 p-2 text-white">
         Login
       </button>
