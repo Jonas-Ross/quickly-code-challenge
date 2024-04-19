@@ -3,6 +3,7 @@
 import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
+import { checkConfirmFields } from '@/lib/utils';
 
 const SignupSchema = z.object({
   user: z.object({
@@ -78,34 +79,39 @@ export async function createUser(prevState: any, formData: FormData) {
       message: 'Missing Fields. Failed to Create Account.',
     };
   }
+  // Remove confirmation fields. Not sure if it will break endpoint but just being safe.
+  const {
+    user: { confirm_email, confirm_password, ...userFields },
+    ...rest
+  } = validatedFields.data;
 
-  // Should be a way to do these 2 with zod but refinements are not working for me right now and I don't want to spend more time on dealing with it.
-  const emailsMatch = formData.get('email') === formData.get('confirm_email');
-  const passwordsMatch =
-    formData.get('password') === formData.get('confirm_password');
-  if (!emailsMatch || !passwordsMatch) {
-    return {
-      errors: {
-        user: {
-          ...(!emailsMatch && { email: ['Email addresses do not match.'] }),
-          ...(!emailsMatch && {
-            confirm_email: ['Email addresses do not match.'],
-          }),
-          ...(!passwordsMatch && { password: ['Passwords do not match.'] }),
-          ...(!passwordsMatch && {
-            confirm_password: ['Passwords do not match.'],
-          }),
-        },
-      },
-      message: 'Failed to Create Account.',
-    };
+  const scrubbedFields = {
+    user: { ...userFields },
+    ...rest,
+  };
+
+  const errors = checkConfirmFields(formData);
+  if (errors) {
+    return errors;
   }
 
   try {
-    console.log('Creating user...');
+    const response = await fetch('https://api-dev.quicklyinc.com/auth/signup', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(scrubbedFields),
+    });
+
+    if (response.ok) {
+      const res = await response.json();
+      console.log('Account Created:', res);
+    } else {
+      const { message } = await response.json();
+      return { message };
+    }
   } catch (error) {
     return {
-      message: 'Database Error: Failed to Create Account.',
+      message: 'Failed to Create Account.',
     };
   }
 

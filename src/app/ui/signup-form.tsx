@@ -12,6 +12,7 @@ export default function SignupForm() {
   const [state, dispatch] = useFormState(createUser, initialState);
 
   // TODO: Show error messages
+  console.log(state);
   return (
     <form action={dispatch} className="flex pt-8">
       <div className="mr-8">
